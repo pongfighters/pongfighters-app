@@ -11,12 +11,14 @@ Select Partner + Opponents
 Result
 
 Nice to Have:
+
 Push Notification:
 
-Challenge -> Accept challenge
-Validate Match Result -> Accept result
-Reserve Table
-Find other to play
+- Challenge -> Accept challenge
+- Validate Match Result -> Accept result
+- Reserve Table
+- Find other to play
 
 For later:
-Organize tournaments
+
+- Organize tournaments
