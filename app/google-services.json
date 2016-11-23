@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "106531410271",
+    "firebase_url": "https://pongfighters-core.firebaseio.com",
+    "project_id": "pongfighters-core",
+    "storage_bucket": "pongfighters-core.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:106531410271:android:ee85130c23e206c8",
+        "android_client_info": {
+          "package_name": "com.pongfighters"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "106531410271-aqldjsgql0v7qp1mema3ka7qhq674q67.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pongfighters",
+            "certificate_hash": "F3E411BA15A0CAF840F107A5A81728BD1130AFFF"
+          }
+        },
+        {
+          "client_id": "106531410271-4mmfqjahd22nfslvo7963pi8pt2skkph.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOWTA9XOGfRbZu-fKgBBwqzV9YbYax9FY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "106531410271-4mmfqjahd22nfslvo7963pi8pt2skkph.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
