@@ -246,7 +246,7 @@ public class GoogleSignInActivity extends BaseActivity implements
 
     private void saveUser() {
         FirebaseUser user = mAuth.getCurrentUser();
-        User userModel = new User(user.getDisplayName(), user.getEmail());
+        User userModel = new User(user.getEmail(), user.getEmail());
 
         mDatabase.child("users").child(user.getUid()).setValue(userModel);
     }

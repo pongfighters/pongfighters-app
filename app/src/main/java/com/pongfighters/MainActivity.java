@@ -29,9 +29,9 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // Name, email address, and profile photo Url
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            Uri photoUrl = user.getPhotoUrl();
+            //String name = user.getDisplayName();
+            //String email = user.getEmail();
+            //Uri photoUrl = user.getPhotoUrl();
 
             // The user's ID, unique to the Firebase project. Do NOT use this value to
             // authenticate with your backend server, if you have one. Use
@@ -44,11 +44,6 @@ public class MainActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mRecycler = (RecyclerView) findViewById(R.id.ranking);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
         // Set up FirebaseRecyclerAdapter with the Query
         Query postsQuery = mDatabase.child("users");
