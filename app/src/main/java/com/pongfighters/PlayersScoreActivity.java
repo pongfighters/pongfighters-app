@@ -35,7 +35,7 @@ public class PlayersScoreActivity extends BaseActivity {
         Query postsQuery = mDatabase.child(User.DOCUMENT_NAME);
 
         mRecycler = (RecyclerView) findViewById(R.id.ranking);
-        mRecycler.setLayoutManager(new LinearLayoutManager(this));
+        Query postsQuery = mDatabase.child(User.DOCUMENT_NAME);
         mAdapter = new FirebaseRecyclerAdapter<User, RankingViewHolder>(User.class, R.layout.item_ranking,
                 RankingViewHolder.class, postsQuery) {
             @Override
