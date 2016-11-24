@@ -101,13 +101,12 @@ public class GoogleSignInActivity extends BaseActivity implements
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    openMain();
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
+                    updateUI(user);
                 }
-                // [START_EXCLUDE]
-                updateUI(user);
-                // [END_EXCLUDE]
             }
         };
         // [END auth_state_listener]
@@ -143,6 +142,7 @@ public class GoogleSignInActivity extends BaseActivity implements
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+                openMain();
             } else {
                 // Google Sign In failed, update UI appropriately
                 // [START_EXCLUDE]
@@ -233,6 +233,12 @@ public class GoogleSignInActivity extends BaseActivity implements
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
+    }
+
+    private void openMain() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
