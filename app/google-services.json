@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "106531410271-dmnjuer5lf97b5glqiqvhsglkns0n5eb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pongfighters",
+            "certificate_hash": "F0CA49357FA1FEC11BD2857B680A47D07B0819B7"
+          }
+        },
+        {
+          "client_id": "106531410271-jci85tlcv49vccfg1ph6123hrqhje8d4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pongfighters",
+            "certificate_hash": "ACBDC483FEB52284A083CBCBE232F73FCC8B9046"
+          }
+        },
+        {
           "client_id": "106531410271-aqldjsgql0v7qp1mema3ka7qhq674q67.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
