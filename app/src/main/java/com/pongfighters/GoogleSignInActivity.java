@@ -39,6 +39,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.pongfighters.models.User;
 
 /**
  * Demonstrate Firebase Authentication using a Google ID Token.
@@ -57,6 +60,8 @@ public class GoogleSignInActivity extends BaseActivity implements
     // [START declare_auth_listener]
     private FirebaseAuth.AuthStateListener mAuthListener;
     // [END declare_auth_listener]
+
+    private DatabaseReference mDatabase;
 
     private GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
@@ -92,6 +97,7 @@ public class GoogleSignInActivity extends BaseActivity implements
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // [START auth_state_listener]
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -101,6 +107,8 @@ public class GoogleSignInActivity extends BaseActivity implements
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    // May be it's not necesary for second time...
+                    saveUser();
                     openMain();
                 } else {
                     // User is signed out
@@ -142,6 +150,7 @@ public class GoogleSignInActivity extends BaseActivity implements
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+                saveUser();
                 openMain();
             } else {
                 // Google Sign In failed, update UI appropriately
@@ -233,6 +242,13 @@ public class GoogleSignInActivity extends BaseActivity implements
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
+    }
+
+    private void saveUser() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        User userModel = new User(user.getDisplayName(), user.getEmail());
+
+        mDatabase.child("users").child(user.getUid()).setValue(userModel);
     }
 
     private void openMain() {
