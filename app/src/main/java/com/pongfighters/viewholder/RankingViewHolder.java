@@ -2,25 +2,27 @@ package com.pongfighters.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pongfighters.R;
 import com.pongfighters.models.User;
 
 public class RankingViewHolder extends RecyclerView.ViewHolder {
-
-    public TextView userNameView;
-    public TextView userPointsView;
+    ImageView mMatchIcon;
+    TextView mUserNameView;
+    TextView mUserPointsView;
 
     public RankingViewHolder(View itemView) {
         super(itemView);
-        userNameView = (TextView) itemView.findViewById(R.id.ranking_username);
-        userPointsView = (TextView) itemView.findViewById(R.id.ranking_user_points);
+        mUserNameView = (TextView) itemView.findViewById(R.id.ranking_username);
+        mUserPointsView = (TextView) itemView.findViewById(R.id.ranking_user_points);
+        mMatchIcon = (ImageView) itemView.findViewById(R.id.match);
     }
 
     public void bindToPost(User user, View.OnClickListener clickListener) {
-        userNameView.setText(user.username);
-        userPointsView.setText("1234");
-        userNameView.setOnClickListener(clickListener);
+        mUserNameView.setText(user.username);
+        mUserPointsView.setText("1234");
+        mMatchIcon.setOnClickListener(clickListener);
     }
 }

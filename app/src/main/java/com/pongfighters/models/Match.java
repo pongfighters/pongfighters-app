@@ -14,6 +14,8 @@ public class Match {
 
     public String id;
     public List<String> users = new ArrayList<>();
+    public String winnerUserId;
+    public String date;
 
     public Match() {
     }
@@ -22,6 +24,8 @@ public class Match {
         Match result = new Match();
         result.id = dataSnapshot.getKey();
         result.users = (List) dataSnapshot.child("users").getValue();
+        result.winnerUserId = (String) dataSnapshot.child("winnerUserId").getValue();
+        result.date = (String) dataSnapshot.child("date").getValue();
         return result;
     }
 }
