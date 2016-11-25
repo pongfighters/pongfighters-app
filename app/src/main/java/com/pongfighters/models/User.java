@@ -7,18 +7,42 @@ import com.google.firebase.database.IgnoreExtraProperties;
 public class User {
     public static final String DOCUMENT_NAME = "users";
 
-    public String id;
-    public String username;
-    public String email;
+    private String id;
+    private String username;
+    private String email;
 
     public User() {
     }
 
     public static User newInstance(DataSnapshot dataSnapshot) {
         User result = new User();
-        result.id = dataSnapshot.getKey();
-        result.email = (String) dataSnapshot.child("email").getValue();
-        result.username = (String) dataSnapshot.child("username").getValue();
+        result.setId(dataSnapshot.getKey());
+        result.setEmail((String) dataSnapshot.child("email").getValue());
+        result.setUsername((String) dataSnapshot.child("username").getValue());
         return result;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

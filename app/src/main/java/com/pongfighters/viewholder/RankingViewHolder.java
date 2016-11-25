@@ -21,7 +21,7 @@ public class RankingViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindToPost(User user, View.OnClickListener clickListener) {
-        mUserNameView.setText(user.username);
+        mUserNameView.setText(user.getUsername());
         mUserPointsView.setText("1234");
         mMatchIcon.setOnClickListener(clickListener);
     }

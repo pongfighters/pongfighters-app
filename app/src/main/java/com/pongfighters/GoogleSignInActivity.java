@@ -27,7 +27,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.pongfighters.models.User;
-import com.pongfighters.models.UserSession;
+import com.pongfighters.tools.UserSession;
+import com.pongfighters.tools.BaseActivity;
 
 /**
  * Demonstrate Firebase Authentication using a Google ID Token.
@@ -177,9 +178,9 @@ public class GoogleSignInActivity extends BaseActivity implements
 
     private void saveUser(FirebaseUser user) {
         User userModel = new User();
-        userModel.id = user.getUid();
-        userModel.username = user.getDisplayName();
-        userModel.email = user.getEmail();
+        userModel.setId(user.getUid());
+        userModel.setUsername(user.getDisplayName());
+        userModel.setEmail(user.getEmail());
 
         mDatabase.child(User.DOCUMENT_NAME).child(user.getUid()).setValue(userModel).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -192,7 +193,7 @@ public class GoogleSignInActivity extends BaseActivity implements
     private void openMain() {
         UserSession.retrieveLoggedInUser(mDatabase);
 
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), PlayersScoreActivity.class);
         startActivity(intent);
         finish();
     }

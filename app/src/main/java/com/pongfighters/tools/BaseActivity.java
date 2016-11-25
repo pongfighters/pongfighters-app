@@ -1,8 +1,10 @@
-package com.pongfighters;
+package com.pongfighters.tools;
 
 import android.app.ProgressDialog;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
+
+import com.pongfighters.R;
 
 public class BaseActivity extends AppCompatActivity {
 
