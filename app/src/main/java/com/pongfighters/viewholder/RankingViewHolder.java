@@ -18,8 +18,9 @@ public class RankingViewHolder extends RecyclerView.ViewHolder {
         userPointsView = (TextView) itemView.findViewById(R.id.ranking_user_points);
     }
 
-    public void bindToPost(User user) {
+    public void bindToPost(User user, View.OnClickListener clickListener) {
         userNameView.setText(user.username);
         userPointsView.setText("1234");
+        userNameView.setOnClickListener(clickListener);
     }
 }

@@ -27,6 +27,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.pongfighters.models.User;
+import com.pongfighters.models.UserSession;
 
 /**
  * Demonstrate Firebase Authentication using a Google ID Token.
@@ -180,7 +181,7 @@ public class GoogleSignInActivity extends BaseActivity implements
         userModel.username = user.getDisplayName();
         userModel.email = user.getEmail();
 
-        mDatabase.child("users").child(user.getUid()).setValue(userModel).addOnFailureListener(new OnFailureListener() {
+        mDatabase.child(User.DOCUMENT_NAME).child(user.getUid()).setValue(userModel).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.e(TAG, e.getMessage());
@@ -189,6 +190,8 @@ public class GoogleSignInActivity extends BaseActivity implements
     }
 
     private void openMain() {
+        UserSession.retrieveLoggedInUser(mDatabase);
+
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         finish();
