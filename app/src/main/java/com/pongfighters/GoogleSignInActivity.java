@@ -18,6 +18,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -27,8 +28,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.pongfighters.models.User;
-import com.pongfighters.tools.UserSession;
 import com.pongfighters.tools.BaseActivity;
+import com.pongfighters.tools.UserSession;
 
 /**
  * Demonstrate Firebase Authentication using a Google ID Token.
@@ -38,6 +39,7 @@ public class GoogleSignInActivity extends BaseActivity implements
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
+    private static final int LOGOUT = 10;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -47,6 +49,7 @@ public class GoogleSignInActivity extends BaseActivity implements
     private GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
     private TextView mDetailTextView;
+    private GoogleSignInAccount mGoogleAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +62,6 @@ public class GoogleSignInActivity extends BaseActivity implements
             @Override
             public void onClick(View view) {
                 signIn();
-            }
-        });
-        findViewById(R.id.sign_out_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signOut();
             }
         });
         findViewById(R.id.disconnect_button).setOnClickListener(new View.OnClickListener() {
@@ -88,7 +85,6 @@ public class GoogleSignInActivity extends BaseActivity implements
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         if (mAuth.getCurrentUser() != null) {
-            saveUser(mAuth.getCurrentUser());
             openMain();
         }
 
@@ -98,8 +94,6 @@ public class GoogleSignInActivity extends BaseActivity implements
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    saveUser(FirebaseAuth.getInstance().getCurrentUser());
-                    openMain();
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -127,22 +121,30 @@ public class GoogleSignInActivity extends BaseActivity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
-                firebaseAuthWithGoogle(result.getSignInAccount());
-                openMain();
-            } else {
-                updateUI(null);
-            }
+        switch (requestCode) {
+            case RC_SIGN_IN:
+                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+                if (result.isSuccess()) {
+                    firebaseAuthWithGoogle(result.getSignInAccount());
+                    openMain();
+                } else {
+                    updateUI(null);
+                }
+                break;
+            case LOGOUT:
+                if (resultCode == 0) {
+                    finish();
+                }
+                break;
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         showProgressDialog();
-
+        mGoogleAccount = acct;
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+
         mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -154,7 +156,12 @@ public class GoogleSignInActivity extends BaseActivity implements
                             Toast.LENGTH_SHORT).show();
                 }
                 hideProgressDialog();
-                saveUser(task.getResult().getUser());
+            }
+        }).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                saveUser();
+                openMain();
             }
         });
     }
@@ -176,11 +183,16 @@ public class GoogleSignInActivity extends BaseActivity implements
         }
     }
 
-    private void saveUser(FirebaseUser user) {
+    private void saveUser() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         User userModel = new User();
         userModel.setId(user.getUid());
         userModel.setUsername(user.getDisplayName());
         userModel.setEmail(user.getEmail());
+
+        if (mGoogleAccount != null && mGoogleAccount.getPhotoUrl() != null) {
+            userModel.setIcon(mGoogleAccount.getPhotoUrl().toString());
+        }
 
         mDatabase.child(User.DOCUMENT_NAME).child(user.getUid()).setValue(userModel).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -194,9 +206,9 @@ public class GoogleSignInActivity extends BaseActivity implements
         UserSession.retrieveLoggedInUser(mDatabase);
 
         Intent intent = new Intent(getApplicationContext(), PlayersScoreActivity.class);
-        startActivity(intent);
-        finish();
+        startActivityForResult(intent, LOGOUT);
     }
+
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -210,16 +222,6 @@ public class GoogleSignInActivity extends BaseActivity implements
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void signOut() {
-        mAuth.signOut();
-
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                updateUI(null);
-            }
-        });
-    }
 
     private void revokeAccess() {
         mAuth.signOut();

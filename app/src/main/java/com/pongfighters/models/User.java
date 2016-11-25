@@ -10,6 +10,7 @@ public class User {
     private String id;
     private String username;
     private String email;
+    private String icon;
 
     public User() {
     }
@@ -19,6 +20,7 @@ public class User {
         result.setId(dataSnapshot.getKey());
         result.setEmail((String) dataSnapshot.child("email").getValue());
         result.setUsername((String) dataSnapshot.child("username").getValue());
+        result.setIcon((String) dataSnapshot.child("icon").getValue());
         return result;
     }
 
@@ -44,5 +46,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getIcon() {
+        return icon;
     }
 }
