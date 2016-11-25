@@ -35,9 +35,7 @@ proguard/
 captures/
 
 # Intellij
-.idea/libraries/*
-.idea/gradle.xml
-.idea/workspace.xml
+.idea
 *.iml
 
 # Keystore files
