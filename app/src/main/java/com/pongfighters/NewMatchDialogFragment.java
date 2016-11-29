@@ -26,6 +26,9 @@ public class NewMatchDialogFragment extends DialogFragment {
 
     List<User> mPartners;
     List<User> mOpponents;
+    List<User> mWinners = new ArrayList<User>();
+    List<User> mLosers = new ArrayList<User>();
+
     Match match = new Match();
 
     public NewMatchDialogFragment() {
@@ -39,19 +42,14 @@ public class NewMatchDialogFragment extends DialogFragment {
     }
 
     private void selectWinner(int index) {
-        for (User user : NewMatchDialogFragment.this.mPartners) {
-            if(index == 0) {
-                match.getWinners().add(user.getId());
-            } else {
-                match.getLosers().add(user.getId());
-            }
-        }
-        for (User user : mOpponents) {
-            if(index == 1) {
-                match.getWinners().add(user.getId());
-            } else {
-                match.getLosers().add(user.getId());
-            }
+        mWinners.clear();
+        mLosers.clear();
+        if(index == 0) {
+            mWinners.addAll(mPartners);
+            mLosers.addAll(mOpponents);
+        } else {
+            mWinners.addAll(mOpponents);
+            mLosers.addAll(mPartners);
         }
     }
 
@@ -88,6 +86,16 @@ public class NewMatchDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                         match.setDate(DateUtils.formatDate(new Date()));
+                        for (User user : NewMatchDialogFragment.this.mWinners) {
+                            match.getWinners().add(user.getId());
+                            user.setPoints(user.getPoints() + 5);
+                            mDatabase.child(User.DOCUMENT_NAME).child(user.getId()).setValue(user);
+                        }
+                        for (User user : NewMatchDialogFragment.this.mLosers) {
+                            match.getLosers().add(user.getId());
+                            user.setPoints(user.getPoints() + 1);
+                            mDatabase.child(User.DOCUMENT_NAME).child(user.getId()).setValue(user);
+                        }
                         String key = mDatabase.child(Match.DOCUMENT_NAME).push().getKey();
                         mDatabase.child(Match.DOCUMENT_NAME).child(key).setValue(match);
                         mPartners.clear();
