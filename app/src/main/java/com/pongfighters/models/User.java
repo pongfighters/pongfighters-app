@@ -11,6 +11,7 @@ public class User {
     private String username;
     private String email;
     private String icon;
+    private long points;
 
     public User() {
     }
@@ -21,6 +22,7 @@ public class User {
         result.setEmail((String) dataSnapshot.child("email").getValue());
         result.setUsername((String) dataSnapshot.child("username").getValue());
         result.setIcon((String) dataSnapshot.child("icon").getValue());
+        result.setPoints((long)dataSnapshot.child("points").getValue());
         return result;
     }
 
@@ -55,4 +57,14 @@ public class User {
     public String getIcon() {
         return icon;
     }
+
+    public long getPoints() {
+        return points;
+    }
+
+    public void setPoints(long points) {
+        this.points = points;
+    }
+
+
 }

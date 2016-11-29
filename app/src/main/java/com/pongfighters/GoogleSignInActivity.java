@@ -189,6 +189,7 @@ public class GoogleSignInActivity extends BaseActivity implements
         userModel.setId(user.getUid());
         userModel.setUsername(user.getDisplayName());
         userModel.setEmail(user.getEmail());
+        userModel.setPoints(0);
 
         if (mGoogleAccount != null && mGoogleAccount.getPhotoUrl() != null) {
             userModel.setIcon(mGoogleAccount.getPhotoUrl().toString());

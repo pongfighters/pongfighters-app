@@ -21,6 +21,7 @@ public class RankingViewHolder extends RecyclerView.ViewHolder {
     TextView mUserPointsView;
     CheckBox mPartnerView;
     CheckBox mOpponetView;
+    TextView mPoints;
 
     public RankingViewHolder(View itemView) {
         super(itemView);
@@ -29,6 +30,7 @@ public class RankingViewHolder extends RecyclerView.ViewHolder {
         mUserPointsView = (TextView) itemView.findViewById(R.id.ranking_user_points);
         mPartnerView = (CheckBox) itemView.findViewById(R.id.partner);
         mOpponetView = (CheckBox) itemView.findViewById(R.id.opponent);
+        mPoints = (TextView) itemView.findViewById(R.id.ranking_user_points);
     }
 
     private void updateCheckbox(User user, final List<User> partners, final List<User> opponents) {
@@ -38,7 +40,7 @@ public class RankingViewHolder extends RecyclerView.ViewHolder {
 
     public void bindToPost(Context context, final User user, final List<User> partners, final List<User> opponents, final OnSelectionChange selectionChange) {
         mUserNameView.setText(user.getUsername());
-        mUserPointsView.setText("1234");
+        mUserPointsView.setText(String.valueOf(user.getPoints()));
         updateCheckbox(user, partners, opponents);
         Picasso.with(context).load(user.getIcon()).into(mUserIcon);
         mPartnerView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
