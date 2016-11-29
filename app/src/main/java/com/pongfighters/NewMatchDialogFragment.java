@@ -26,6 +26,7 @@ public class NewMatchDialogFragment extends DialogFragment {
 
     List<User> mPartners;
     List<User> mOpponents;
+    Match match = new Match();
 
     public NewMatchDialogFragment() {
 
@@ -37,49 +38,65 @@ public class NewMatchDialogFragment extends DialogFragment {
         mOpponents = opponents;
     }
 
+    private void selectWinner(int index) {
+        for (User user : NewMatchDialogFragment.this.mPartners) {
+            if(index == 0) {
+                match.getWinners().add(user.getId());
+            } else {
+                match.getLosers().add(user.getId());
+            }
+        }
+        for (User user : mOpponents) {
+            if(index == 1) {
+                match.getWinners().add(user.getId());
+            } else {
+                match.getLosers().add(user.getId());
+            }
+        }
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
         //mSelectedItems = new ArrayList<>();  // Where we track the selected items
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final CharSequence[] values = new CharSequence[2];
-        values[0] = "";
-        values[1] = "";
-
-        for (User user : mPartners) {
-            values[0] = values[0] + user.getUsername();
+        values[0] = mPartners.get(0).getUsername();
+        values[1] = mOpponents.get(0).getUsername();
+        if(mPartners.size() > 1) {
+            values[0] = values[0] + " & " + mPartners.get(1).getUsername();
+        }
+        if(mOpponents.size() > 1) {
+            values[0] = values[0] + " & " + mOpponents.get(1).getUsername();
         }
 
-        for (User user : mOpponents) {
-            values[1] = values[1] + user.getUsername();
-        }
+        // select default winner, first one
+        selectWinner(0);
 
         // Set the dialog title
         builder.setTitle(R.string.select_winner)
-                // Specify the list array, the items to be selected by default (null for none),
-                // and the listener through which to receive callbacks when items are selected
                 .setSingleChoiceItems(values, 0, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int index) {
+                                selectWinner(index);
                             }
                         }
+
                 )
-                // Set the action buttons
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int id) {
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                        Match match = new Match();
-                        for (User user : NewMatchDialogFragment.this.mPartners) {
-                            match.getUsers().add(user.getId());
-                        }
-                        for (User user : mOpponents) {
-                            match.getUsers().add(user.getId());
-                        }
-                        //match.setWinnerUserId(UserSession.getLoggedInUser().getId()); 
                         match.setDate(DateUtils.formatDate(new Date()));
                         String key = mDatabase.child(Match.DOCUMENT_NAME).push().getKey();
                         mDatabase.child(Match.DOCUMENT_NAME).child(key).setValue(match);
+                        mPartners.clear();
+                        mOpponents.clear();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
                     }
                 });
         return builder.create();

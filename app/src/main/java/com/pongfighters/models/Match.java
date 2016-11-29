@@ -9,8 +9,8 @@ public class Match {
     public static final String DOCUMENT_NAME = "matches";
 
     private String id;
-    private List<String> users = new ArrayList<>();
-    private String winnerUserId;
+    private List<String> winners = new ArrayList<>();
+    private List<String> losers = new ArrayList<>();
     private String date;
 
     public Match() {
@@ -19,8 +19,8 @@ public class Match {
     public static Match newInstance(DataSnapshot dataSnapshot) {
         Match result = new Match();
         result.setId(dataSnapshot.getKey());
-        result.setUsers((List) dataSnapshot.child("users").getValue());
-        result.setWinnerUserId((String) dataSnapshot.child("winnerUserId").getValue());
+        result.setWinners((List) dataSnapshot.child("winners").getValue());
+        result.setLosers((List) dataSnapshot.child("losers").getValue());
         result.setDate((String) dataSnapshot.child("date").getValue());
         return result;
     }
@@ -33,20 +33,20 @@ public class Match {
         this.id = id;
     }
 
-    public List<String> getUsers() {
-        return users;
+    public List<String> getWinners() {
+        return winners;
     }
 
-    public void setUsers(List<String> users) {
-        this.users = users;
+    public void setWinners(List<String> winners) {
+        this.winners = winners;
     }
 
-    public String getWinnerUserId() {
-        return winnerUserId;
+    public List<String> getLosers() {
+        return losers;
     }
 
-    public void setWinnerUserId(String winnerUserId) {
-        this.winnerUserId = winnerUserId;
+    public void setLosers(List<String> losers) {
+        this.losers = losers;
     }
 
     public String getDate() {
