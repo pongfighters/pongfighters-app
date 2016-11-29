@@ -8,22 +8,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.pongfighters.models.User;
 import com.pongfighters.tools.BaseActivity;
-import com.pongfighters.viewholder.OnSelectionChange;
 import com.pongfighters.viewholder.RankingViewHolder;
 
 import java.util.ArrayList;
@@ -64,26 +60,18 @@ public class PlayersScoreActivity extends BaseActivity implements GoogleApiClien
                 RankingViewHolder.class, postsQuery) {
             @Override
             protected void populateViewHolder(final RankingViewHolder viewHolder, final User model, final int position) {
-                viewHolder.bindToPost(getApplicationContext(), model, partners, opponents, new OnSelectionChange() {
-                    @Override
-                    public void selectionChange() {
-                        if (opponents.size() == 1 && partners.size() == 1 || opponents.size() == 2 && partners.size() == 2) {
-                            mFab.show();
-                        } else {
-                            mFab.hide();
-                        }
-
+                viewHolder.bindToPost(getApplicationContext(), model, partners, opponents, () -> {
+                    if (opponents.size() == 1 && partners.size() == 1 || opponents.size() == 2 && partners.size() == 2) {
+                        mFab.show();
+                    } else {
+                        mFab.hide();
                     }
+
                 });
             }
         };
         mRecycler.setAdapter(mAdapter);
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new NewMatchDialogFragment(partners, opponents).show(PlayersScoreActivity.this.getFragmentManager(), "new_score");
-            }
-        });
+        mFab.setOnClickListener(view -> new NewMatchDialogFragment(partners, opponents).show(PlayersScoreActivity.this.getFragmentManager(), "new_score"));
     }
 
     @Override
@@ -107,12 +95,9 @@ public class PlayersScoreActivity extends BaseActivity implements GoogleApiClien
     private void signOut() {
         FirebaseAuth.getInstance().signOut();
 
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                setResult(1);
-                finish();
-            }
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(status -> {
+            setResult(1);
+            finish();
         });
     }
 

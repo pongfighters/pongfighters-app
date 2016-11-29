@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,37 +42,30 @@ public class RankingViewHolder extends RecyclerView.ViewHolder {
         mUserPointsView.setText(String.valueOf(user.getPoints()));
         updateCheckbox(user, partners, opponents);
         Picasso.with(context).load(user.getIcon()).into(mUserIcon);
-        mPartnerView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    partners.add(user);
-                    if (opponents.contains(user)) {
-                        opponents.remove(user);
+        mPartnerView.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                partners.add(user);
+                if (opponents.contains(user)) {
+                    opponents.remove(user);
 
-                    }
-                } else {
+                }
+            } else {
+                partners.remove(user);
+            }
+            selectionChange.selectionChange();
+            updateCheckbox(user, partners, opponents);
+        });
+        mOpponetView.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                opponents.add(user);
+                if (partners.contains(user)) {
                     partners.remove(user);
                 }
-                selectionChange.selectionChange();
-                updateCheckbox(user, partners, opponents);
+            } else {
+                opponents.remove(user);
             }
-        });
-        mOpponetView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    opponents.add(user);
-                    if (partners.contains(user)) {
-                        partners.remove(user);
-                    }
-                } else {
-                    opponents.remove(user);
-                }
-                selectionChange.selectionChange();
-                updateCheckbox(user, partners, opponents);
-            }
-
+            selectionChange.selectionChange();
+            updateCheckbox(user, partners, opponents);
         });
     }
 }
