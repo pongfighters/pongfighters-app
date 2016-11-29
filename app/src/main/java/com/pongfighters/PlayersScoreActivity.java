@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.auth.api.Auth;
@@ -77,6 +78,12 @@ public class PlayersScoreActivity extends BaseActivity implements GoogleApiClien
             }
         };
         mRecycler.setAdapter(mAdapter);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new NewMatchDialogFragment(partners, opponents).show(PlayersScoreActivity.this.getFragmentManager(), "new_score");
+            }
+        });
     }
 
     @Override

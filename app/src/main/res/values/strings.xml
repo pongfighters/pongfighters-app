@@ -58,5 +58,11 @@
 
     <string name="id_fmt">User ID: %s</string>
     <string name="email_fmt">Email: %s</string>
+
     <string name="logout">Logout</string>
+
+    <string name="select_winner">Select Winner!</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+
 </resources>
