@@ -4,7 +4,7 @@ apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.1"
     defaultConfig {
         applicationId "com.pongfighters"
         minSdkVersion 19
@@ -12,6 +12,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -38,16 +39,16 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     // Firabse Core
-    compile 'com.google.firebase:firebase-core:10.0.0'
+    compile 'com.google.firebase:firebase-core:10.0.1'
 
     // Firebase Database
     compile 'com.firebaseui:firebase-ui-database:1.0.0'
     compile 'com.google.firebase:firebase-database:10.0.0'
 
     // Firebase Authentication
-    compile 'com.google.firebase:firebase-auth:10.0.0'
+    compile 'com.google.firebase:firebase-auth:10.0.1'
     // Google Sign In SDK (only required for Google Sign In)
-    compile 'com.google.android.gms:play-services-auth:10.0.0'
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
 
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 
