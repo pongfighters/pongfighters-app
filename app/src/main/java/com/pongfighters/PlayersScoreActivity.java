@@ -35,6 +35,12 @@ public class PlayersScoreActivity extends BaseActivity implements GoogleApiClien
     List<User> partners = new ArrayList<>();
     private GoogleApiClient mGoogleApiClient;
 
+    RestoredUsers storedOpponents = new RestoredUsers();
+    RestoredUsers storedPartners = new RestoredUsers();
+
+    private String OPPONENTS_KEY = "opponents";
+    private String PARTNERS_KEY = "partners";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +66,9 @@ public class PlayersScoreActivity extends BaseActivity implements GoogleApiClien
                 RankingViewHolder.class, postsQuery) {
             @Override
             protected void populateViewHolder(final RankingViewHolder viewHolder, final User model, final int position) {
+                storedOpponents.filterByModel(model, opponents);
+                storedPartners.filterByModel(model, partners);
+
                 viewHolder.bindToPost(getApplicationContext(), model, partners, opponents, () -> {
                     if (opponents.size() == 1 && partners.size() == 1 || opponents.size() == 2 && partners.size() == 2) {
                         mFab.show();
@@ -72,6 +81,30 @@ public class PlayersScoreActivity extends BaseActivity implements GoogleApiClien
         };
         mRecycler.setAdapter(mAdapter);
         mFab.setOnClickListener(view -> new NewMatchDialogFragment(partners, opponents).show(PlayersScoreActivity.this.getFragmentManager(), "new_score"));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        storedOpponents.setListOfUsers(opponents);
+        storedPartners.setListOfUsers(partners);
+
+        outState.putStringArrayList(OPPONENTS_KEY, storedOpponents.usersIds);
+        outState.putStringArrayList(PARTNERS_KEY, storedPartners.usersIds);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        storedOpponents.setRestoredUsers(savedInstanceState.getStringArrayList(OPPONENTS_KEY));
+        storedPartners.setRestoredUsers(savedInstanceState.getStringArrayList(PARTNERS_KEY));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -104,5 +137,28 @@ public class PlayersScoreActivity extends BaseActivity implements GoogleApiClien
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+}
+
+class RestoredUsers {
+    ArrayList<String> usersIds = new ArrayList<>();
+
+    public void setListOfUsers(List<User> listOfUsers) {
+        for(User user : listOfUsers) {
+            usersIds.add(user.getId());
+        }
+    }
+
+    public void setRestoredUsers(ArrayList<String> listOfUsers) {
+        for(String userId : listOfUsers) {
+            usersIds.add(userId);
+        }
+    }
+
+    public void filterByModel(final User model, List<User> users) {
+        if(usersIds.contains(model.getId())) {
+            users.add(model);
+            usersIds.remove(model.getId());
+        }
     }
 }
