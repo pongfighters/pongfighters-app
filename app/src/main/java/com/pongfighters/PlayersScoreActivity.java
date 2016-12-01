@@ -38,8 +38,8 @@ public class PlayersScoreActivity extends BaseActivity implements GoogleApiClien
     RestoredUsers storedOpponents = new RestoredUsers();
     RestoredUsers storedPartners = new RestoredUsers();
 
-    private String OPPONENTS_KEY = "opponents";
-    private String PARTNERS_KEY = "partners";
+    private static final String OPPONENTS_KEY = "opponents";
+    private static final String PARTNERS_KEY = "partners";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
